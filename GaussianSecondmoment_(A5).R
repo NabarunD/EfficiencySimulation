@@ -20,8 +20,8 @@ require(Rcpp)
 
 mainf=function()
 {
-  altseq=seq(-0.25,-0.01,0.01) # Vector of parameters
-  d=2 # controls the dimension
+  altseq=seq(0.01,0.2,0.01) # Vector of parameters
+  d=3 # controls the dimension
   n=200 # controls the sample size
   alp=0.05 # controls the level of the test
   photel=numeric(length(altseq)) # Usual Hotelling
@@ -37,8 +37,8 @@ mainf=function()
   {
     Sig=diag(d)
     mn=rep(0,d)
-    xsam=exp(mvrnorm(n,mu=mn,Sigma=Sig))
-    ysam=exp(mvrnorm(n,mu=rep(altseq[i],d),Sigma=Sig))
+    xsam=matrix((rnorm(n*d,0,1)^4-3)/(sqrt(2)),n,d)
+    ysam=matrix((rnorm(n*d,altseq[i],1)^2-(1+altseq[i]^2)),n,d)
     photel[i]=as.numeric(hotelling.test(xsam,ysam,perm=TRUE,progBar=FALSE,B=5000)$pval<=alp)
     penergy[i]=as.numeric(eqdist.etest(rbind(xsam,ysam),sizes=c(n,n),R=500)$p.value<=alp)
     pmmd[i]=as.numeric(kmmd(xsam,ysam,asymptotic=TRUE)@AsympH0)
@@ -77,9 +77,9 @@ mainf=function()
 ###### It should have 9 rows and the length of the parameter vector as the number of columns
 st=read.csv("filename.csv")[,-1]
 xval=seq(0.01,0.2,0.1)
-df1=data.frame(x=xval,y=pava(st[1,],dec=T),test = "1")
-df2=data.frame(x=xval,y=pava(st[4,],dec=T),test = "2")
-df3=data.frame(x=xval,y=pava(st[7,],dec=T),test = "3")
+df1=data.frame(x=xval,y=pava(st[1,],dec=F),test = "1")
+df2=data.frame(x=xval,y=pava(st[4,],dec=F),test = "2")
+df3=data.frame(x=xval,y=pava(st[7,],dec=F),test = "3")
 par(bg="grey")
 plot(df1$x,df1$y,type="o",pch=11,lwd=2,xlab="Sample size",xaxt="n",ylab="Empirical power",ylim=c(0,1),cex.lab=1.5,cex.axis=1.5,main="d=5",cex.main=2.5)
 axis(1,cex.axis=1.5)

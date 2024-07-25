@@ -18,7 +18,7 @@ require(Rcpp)
 
 ################### Main function 
 
-mainffinal=function()
+mainf=function()
 {
   altseq=seq(0.01,0.2,0.01) # Vector of parameters
   d=2 # controls the dimension
