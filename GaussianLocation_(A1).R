@@ -78,6 +78,7 @@ mainffinal=function()
 ############################ Plotting code 
 
 ###### Let filename.csv be the data matrix containing the power of the 9 tests above based on the above code
+###### Note the above code provides the function for one replication. This was replicated a thousand times parallely.
 ###### It should have 9 rows and the length of the parameter vector as the number of columns
 st=read.csv("CompareMethodSonar.csv")[,-1]
 xval=seq(0.01,0.2,0.1)
