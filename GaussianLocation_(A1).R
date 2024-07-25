@@ -33,7 +33,6 @@ mainffinal=function()
   purankenergy=numeric(length(altseq)) # Rank Hotelling with Unif ERD
   pgrankmmd=numeric(length(altseq)) # Rank Energy with Unif ERD
   purankmmd=numeric(length(altseq)) # Rank MMD with Unif ERD
-  phhg=numeric(length(altseq))
   for(i in 1:length(altseq))
   {
     Sig=diag(d)
@@ -43,10 +42,6 @@ mainffinal=function()
     photel[i]=as.numeric(hotelling.test(xsam,ysam,perm=TRUE,progBar=FALSE,B=5000)$pval<=alp)
     penergy[i]=as.numeric(eqdist.etest(rbind(xsam,ysam),sizes=c(n,n),R=500)$p.value<=alp)
     pmmd[i]=as.numeric(kmmd(xsam,ysam,asymptotic=TRUE)@AsympH0)
-    Dxsam=as.matrix(dist((xsam), diag = TRUE, upper = TRUE))
-    Dysam=as.matrix(dist((ysam), diag = TRUE, upper = TRUE))
-    hhg=hhg.test(Dxsam, Dysam, nr.perm = 1000)
-    phhg[i]=as.numeric(min(hhg$perm.pval.hhg.sc,hhg$perm.pval.hhg.sl,hhg$perm.pval.hhg.mc,hhg$perm.pval.hhg.ml)<=alp)
     datam=rbind(xsam,ysam)
     distmat=matrix(0,2*n,2*n)
     hseq=qnorm(halton(2*n,d))
@@ -80,7 +75,7 @@ mainffinal=function()
 ###### Let filename.csv be the data matrix containing the power of the 9 tests above based on the above code
 ###### Note the above code provides the function for one replication. This was replicated a thousand times parallely.
 ###### It should have 9 rows and the length of the parameter vector as the number of columns
-st=read.csv("CompareMethodSonar.csv")[,-1]
+st=read.csv("filename.csv")[,-1]
 xval=seq(0.01,0.2,0.1)
 df1=data.frame(x=xval,y=pava(st[1,],dec=F),test = "1")
 df2=data.frame(x=xval,y=pava(st[4,],dec=F),test = "2")
@@ -91,4 +86,4 @@ axis(1,cex.axis=1.5)
 lines(df2$x,df2$y,type="o",pch=7,lwd=2,col="red")
 lines(df3$x,df3$y,type="o",pch=5,lwd=2,col="blue")
 grid(4,4,col="white")
-legend("bottomright", bty='n', legend=c("MMD","RankGaussMMD","RankUnifMMD"),col=c("black","red","blue"), lty=rep(1,6), cex=1.7,lwd=2,pch=c(11,7,5,1),y.intersp=1.5)
+legend("bottomright", bty='n', legend=c("Hotelling","RankGaussHotelling","RankUnifHotelling"),col=c("black","red","blue"), lty=rep(1,6), cex=1.7,lwd=2,pch=c(11,7,5,1),y.intersp=1.5)
